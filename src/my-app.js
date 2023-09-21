@@ -1,39 +1,22 @@
 import {LitElement, html, css} from "lit";
 
-import "./components/get-data";
+import './components/get-data';
+import './components/data-title'
+import styles from './styles/MyAppStyles'
 
 export class MyApp extends LitElement {
     static get properties() {
         return {
-            wiki: {type: Array},
+            apiData: {type: Array},
         };
     }
 
-    static styles = [css`
-        :host {
-            display:block;
-        }
-        get-data {
-            display: none;
-        }
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 20px;
-        }
-        .card {
-            background-color: #fff;
-            border-radius: 5px;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12)
-        }
-
-    `];
+    static styles = [ styles ];
 
     constructor() {
         super();
 
-        this.wiki = [];
+        this.apiData = [];
 
         this.addEventListener("ApiData", (e) => {
             this._formatData(e.detail.data);
@@ -53,24 +36,27 @@ export class MyApp extends LitElement {
         });
 
         console.log(characters)
-        this.wiki = characters;
+        this.apiData = characters;
     }
 
     render() {
         return html`
+        <div class="view">
             <get-data
                 _url="https://rickandmortyapi.com/api/character"
                 _method="GET"
             ></get-data>
+            <data-title></data-title>
             <div class="container">
                 ${this.getCharacters()}
             </div>
+        </div>
         `;
     }
 
     getCharacters() {
         return html`
-            ${this.wiki.map(
+            ${this.apiData.map(
                 (character) => html`
                     <div class="card">
                         <div class="card-content">
